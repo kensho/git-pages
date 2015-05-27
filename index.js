@@ -60,14 +60,14 @@ function cloneRepo(repoName, info) {
   return repoCloned;
 }
 
-function pullRepo(repoName) {
+function pullRepo(repoName, branch) {
   var repoPath = storagePath + repoName;
   var repo = git(repoPath);
   console.log('pulling repo', quote(repoName));
   return Q.ninvoke(repo, 'sync')
     .then(function () {
       console.log('checking out master', quote(repoName));
-      return Q.ninvoke(repo, 'checkout', 'master');
+      return Q.ninvoke(repo, 'checkout', branch || 'master');
     });
 }
 
@@ -81,7 +81,7 @@ Q.all(R.keys(repoConfig).map(function (repoName) {
   var repo = repoConfig[repoName];
   var repoPath = storagePath + repoName;
   var repoMerged = cloneRepo(repoName, repo).then(function () {
-    return pullRepo(repoName);
+    return pullRepo(repoName, repo.branch);
   }).then(function () {
     console.log('setting up route for repo', quote(repoName));
     app.get('/' + repoName, function (req, res) {
