@@ -28,7 +28,7 @@ var app = express();
 app.use(morgan('dev'));
 
 app.get('/', function (req, res) {
-    res.send('Hello world\n');
+    res.send('TODO: show the list of available repos\n');
 });
 
 var repoConfig = require('./repos');
@@ -40,12 +40,19 @@ if (!fs.existsSync(storagePath)) {
   fs.mkdirSync(storagePath);
 }
 
-function cloneRepo(repoName) {
+function fullGitUrl(name) {
+  return 'git@github.com:' + name + '.git';
+}
+
+function cloneRepo(repoName, info) {
   var repoPath = storagePath + repoName;
   var repoCloned = Q(null);
   if (!fs.existsSync(repoPath)) {
-    console.log('cloning repo', quote(repoName), 'to', quote(repoPath));
-    repoCloned = Q.nfcall(git.clone, 'git@github.com:kensho/' + repoName + '.git', repoPath)
+    var url = fullGitUrl(info.git);
+    console.log('cloning repo %s from %s to %s',
+      quote(repoName), quote(url), quote(repoPath));
+
+    repoCloned = Q.nfcall(git.clone, url, repoPath)
       .catch(function (err) {
         console.log('Error cloning:', repoName, err);
       });
@@ -71,13 +78,15 @@ app.get('/pull/:repo', function (req, res) {
 });
 
 Q.all(R.keys(repoConfig).map(function (repoName) {
+  var repo = repoConfig[repoName];
   var repoPath = storagePath + repoName;
-  var repoMerged = cloneRepo(repoName).then(function () {
+  var repoMerged = cloneRepo(repoName, repo).then(function () {
     return pullRepo(repoName);
   }).then(function () {
     console.log('setting up route for repo', quote(repoName));
     app.get('/' + repoName, function (req, res) {
-      var full = join(repoPath, repoConfig[repoName]);
+      var index = repoConfig[repoName].index || 'index.html';
+      var full = join(repoPath, index);
       console.log(full);
       res.sendFile(full);
     });
