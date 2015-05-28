@@ -60,17 +60,15 @@ function pullRepo(repoName, branch) {
   var repo = git(repoPath);
   console.log('pulling repo %s in %s', quote(repoName), quote(repoPath));
 
-  return Q.ninvoke(repo, 'sync', branch)
+  return Q.ninvoke(repo, 'remote_fetch', 'origin')
     .then(function () {
       console.log('checking out branch %s in %s', branch, quote(repoName));
-      return Q.ninvoke(repo, 'checkout', branch);
+      return Q.ninvoke(repo, 'reset', 'origin/' + branch, {hard: true});
     });
 }
 
 app.get('/pull/:repo', function (req, res) {
-  pullRepo(req.params.repo);
-  // not waiting for the pull to finish before the response?
-  res.send('OK');
+  pullRepo(req.params.repo).then(res.send.bind(res, 'OK'));
 });
 
 Q.all(R.keys(repoConfig).map(function (repoName) {
