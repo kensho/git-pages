@@ -16,7 +16,17 @@ var directToSubApp = require('./src/sub-app');
 var app = express();
 app.use(morgan('dev'));
 
-var repoConfig = require('./git-pages.config').repos;
+// Default config
+var defaultConfig = {
+  repos: {},
+  storagePath: '/tmp/kpages',
+  port: 8765
+};
+
+var userConfig = R.merge(defaultConfig, require('./git-pages.config'));
+var repoConfig = userConfig.repos;
+
+
 // TODO: fill missing default values
 console.log('Will serve pages for repos', R.keys(repoConfig));
 
@@ -28,7 +38,7 @@ app.get('/', function (req, res) {
   res.send(html);
 });
 
-var storagePath = '/tmp/kpages/';
+var storagePath = userConfig.storagePath;
 if (!fs.existsSync(storagePath)) {
   console.log('making storage', quote(storagePath));
   fs.mkdirSync(storagePath);
@@ -91,7 +101,7 @@ Q.all(R.keys(repoConfig).map(function (repoName) {
   app.use(directToSubApp);
   app.use(express.static(storagePath));
 
-  var PORT = process.env.PORT || 8765;
+  var PORT = process.env.PORT || userConfig.port;
   app.listen(PORT, '0.0.0.0');
   console.log('Running on http://localhost:' + PORT);
 }).catch(function (err) {

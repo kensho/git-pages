@@ -18,5 +18,7 @@ module.exports = {
       git: 'bahmutov/local-angular-development',
       branch: 'gh-pages'
     }
-  }
+  },
+  storagePath: '/tmp/kpages',
+  port: 8765
 };
