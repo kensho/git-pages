@@ -10,6 +10,8 @@ var R = require('ramda');
 var git = require('gift');
 var quote = require('quote');
 var join = require('path').join;
+var extname = require('path').extname;
+var marked = require('marked');
 
 var directToSubApp = require('./src/sub-app');
 
@@ -81,19 +83,37 @@ app.get('/pull/:repo', function (req, res) {
   pullRepo(req.params.repo).then(res.send.bind(res, 'OK'));
 });
 
-Q.all(R.keys(repoConfig).map(function (repoName) {
+var extensionRenderers = {
+  '.md': function renderMarkdown(res, path) {
+    fs.readFile(path, 'utf8', function (err, data) {
+      res.send(marked(data.toString()));
+    });
+  }
+}
+
+function repoRouteFor(repoName) {
   var repo = repoConfig[repoName];
   var repoPath = storagePath + repoName;
+  return function repoRoute(req, res) {
+    var index = repoConfig[repoName].index || 'index.html';
+    var full = join(repoPath, index);
+    var fileExt = extname(full);
+    if (R.has(fileExt, extensionRenderers)) {
+      extensionRenderers[fileExt](res, full);
+    } else {
+      res.sendFile(full);
+    }
+  };
+}
+
+
+Q.all(R.keys(repoConfig).map(function (repoName) {
+  var repo = repoConfig[repoName];
   var repoMerged = cloneRepo(repoName, repo).then(function () {
     return pullRepo(repoName, repo.branch);
   }).then(function () {
     console.log('setting up route for repo', quote(repoName));
-    app.get('/' + repoName, function (req, res) {
-      var index = repoConfig[repoName].index || 'index.html';
-      var full = join(repoPath, index);
-      console.log(full);
-      res.sendFile(full);
-    });
+    app.get('/' + repoName, repoRouteFor(repoName));
   });
   return repoMerged;
 })).then(function () {

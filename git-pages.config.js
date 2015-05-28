@@ -17,6 +17,10 @@ module.exports = {
     'local-angular-development': {
       git: 'bahmutov/local-angular-development',
       branch: 'gh-pages'
+    },
+    'git-pages': {
+      git: 'kensho/git-pages',
+      index: 'README.md'
     }
   },
   storagePath: '/tmp/kpages',
