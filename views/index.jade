@@ -2,22 +2,26 @@ doctype html
 html(lang="en")
   head
     meta(charset="utf-8")
-    title git-repos
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    link(rel="stylesheet", href="//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.2/css/foundation.min.css")
+    title git-pages
   body
-    h1 git-repos
-    .container
-      table
-        thead
-          tr
-            td name
-            td git
-            td branch
-            td link
-        tbody
-          each repo, name in repos
+    .row
+      .small-9.large-centered.columns
+        h1 git-pages
+        table
+          thead
             tr
-              td= name
-              td= repo.git
-              td= repo.branch
-              td
-                a(href="./#{name}") link
+              td(width="200") name
+              td(width="300") git
+              td branch
+              td link
+          tbody
+            each repo, name in repos
+              tr
+                td= name
+                td
+                  a(href="https://github.com/#{repo.git}/tree/#{repo.branch}", target="_blank") #{repo.git}
+                td= repo.branch
+                td
+                  a(href="./#{name}") link

@@ -17,6 +17,7 @@ var app = express();
 app.use(morgan('dev'));
 
 var repoConfig = require('./repos');
+// TODO: fill missing default values
 console.log('Will serve pages for repos', R.keys(repoConfig));
 
 app.get('/', function (req, res) {
