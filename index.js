@@ -18,7 +18,7 @@ var directToSubApp = require('./src/sub-app');
 var app = express();
 app.use(morgan('dev'));
 
-// Default config
+// TODO read run config using nconf
 var defaultConfig = {
   repos: {},
   storagePath: '/tmp/kpages',
@@ -28,9 +28,14 @@ var defaultConfig = {
 var userConfig = R.merge(defaultConfig, require('./git-pages.config'));
 var repoConfig = userConfig.repos;
 
+var defaultRepo = {
+  git: '',
+  branch: 'master',
+  index: 'index.html'
+};
+repoConfig = R.mapObj(R.merge(defaultRepo), repoConfig);
 
-// TODO: fill missing default values
-console.log('Will serve pages for repos', R.keys(repoConfig));
+console.log('Will serve pages for repos', R.keys(repoConfig).join(', '));
 
 app.get('/', function (req, res) {
   var jade = require('jade');
@@ -67,7 +72,6 @@ function cloneRepo(repoName, info) {
 }
 
 function pullRepo(repoName, branch) {
-  branch = branch || 'master';
   var repoPath = storagePath + repoName;
   var repo = git(repoPath);
   console.log('pulling repo %s in %s', quote(repoName), quote(repoPath));
@@ -95,7 +99,7 @@ function repoRouteFor(repoName) {
   var repo = repoConfig[repoName];
   var repoPath = storagePath + repoName;
   return function repoRoute(req, res) {
-    var index = repoConfig[repoName].index || 'index.html';
+    var index = repoConfig[repoName].index;
     var full = join(repoPath, index);
     var fileExt = extname(full);
     if (R.has(fileExt, extensionRenderers)) {
