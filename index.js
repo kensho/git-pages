@@ -16,7 +16,7 @@ var directToSubApp = require('./src/sub-app');
 var app = express();
 app.use(morgan('dev'));
 
-var repoConfig = require('./repos');
+var repoConfig = require('./git-pages.config').repos;
 // TODO: fill missing default values
 console.log('Will serve pages for repos', R.keys(repoConfig));
 

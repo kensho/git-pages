@@ -11,8 +11,10 @@
   };
 */
 module.exports = {
-  'local-angular-development': {
-    git: 'bahmutov/local-angular-development',
-    branch: 'gh-pages'
+  repos: {
+    'local-angular-development': {
+      git: 'bahmutov/local-angular-development',
+      branch: 'gh-pages'
+    }
   }
 };
