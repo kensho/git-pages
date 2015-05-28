@@ -2,6 +2,12 @@
 
 > Run your own github-like static pages
 
+## Use
+
+* simple start `node index.js` or `npm run start`
+* run with automatic restart and watching source files `npm run watch`. 
+Uses [nodemon](http://nodemon.io/).
+
 ### Small print
 
 Author: Kensho &copy; 2015

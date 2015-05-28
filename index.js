@@ -16,12 +16,16 @@ var directToSubApp = require('./src/sub-app');
 var app = express();
 app.use(morgan('dev'));
 
-app.get('/', function (req, res) {
-    res.send('TODO: show the list of available repos\n');
-});
-
 var repoConfig = require('./repos');
 console.log('Will serve pages for repos', R.keys(repoConfig));
+
+app.get('/', function (req, res) {
+  var jade = require('jade');
+  var render = jade.compileFile('./views/index.jade', { pretty: true });
+  console.log('git names', repoConfig);
+  var html = render({ repos: repoConfig });
+  res.send(html);
+});
 
 var storagePath = '/tmp/kpages/';
 if (!fs.existsSync(storagePath)) {
@@ -50,13 +54,15 @@ function cloneRepo(repoName, info) {
 }
 
 function pullRepo(repoName, branch) {
+  branch = branch || 'master';
   var repoPath = storagePath + repoName;
   var repo = git(repoPath);
-  console.log('pulling repo', quote(repoName));
-  return Q.ninvoke(repo, 'sync')
+  console.log('pulling repo %s in %s', quote(repoName), quote(repoPath));
+
+  return Q.ninvoke(repo, 'sync', branch)
     .then(function () {
-      console.log('checking out master', quote(repoName));
-      return Q.ninvoke(repo, 'checkout', branch || 'master');
+      console.log('checking out branch %s in %s', branch, quote(repoName));
+      return Q.ninvoke(repo, 'checkout', branch);
     });
 }
 

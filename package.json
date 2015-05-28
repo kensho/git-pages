@@ -13,11 +13,14 @@
     "watch": "nodemon"
   },
   "author": "Martin Camacho",
-  "contributors": ["Gleb Bahmutov <gleb.bahmutov@gmail.com>"],
+  "contributors": [
+    "Gleb Bahmutov <gleb.bahmutov@gmail.com>"
+  ],
   "license": "MIT",
   "dependencies": {
     "express": "4.12.3",
     "gift": "0.6.0",
+    "jade": "1.10.0",
     "morgan": "1.5.3",
     "q": "1.4.1",
     "quote": "0.4.0",

@@ -1,0 +1,23 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="utf-8")
+    title git-repos
+  body
+    h1 git-repos
+    .container
+      table
+        thead
+          tr
+            td name
+            td git
+            td branch
+            td link
+        tbody
+          each repo, name in repos
+            tr
+              td= name
+              td= repo.git
+              td= repo.branch
+              td
+                a(href="./#{name}") link
