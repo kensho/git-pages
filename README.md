@@ -2,7 +2,27 @@
 
 > Run your own github-like static pages
 
-## Use
+## Install
+
+* Install globally `npm install -g git-pages`
+* Install as a dependency `npm install --save git-pages`
+
+## Run
+
+Run after installing globally `git-pages`
+
+Run after installing as a dependency (via package.json script)
+
+```json
+"scripts": {
+    "git-pages": "git-pages"
+},
+"dependencies": {
+    "git-pages": "0.2.0"
+}
+```
+
+Run from the cloned folder
 
 * simple start `node index.js` or `npm run start`
 * run with automatic restart and watching source files `npm run watch`. 

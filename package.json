@@ -1,11 +1,15 @@
 {
   "name": "git-pages",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Run your own github-like static pages",
   "main": "index.js",
   "bugs": {
     "url": "https://github.com/kensho/git-pages/issues"
   },
+  "bin": {
+    "git-pages": "./index.js"
+  },
+  "preferGlobal": true,
   "homepage": "https://github.com/kensho/git-pages",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
