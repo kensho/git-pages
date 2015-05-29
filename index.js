@@ -20,28 +20,14 @@ var directToSubApp = require('./src/sub-app');
 var app = express();
 app.use(morgan('dev'));
 
-// TODO read run config using nconf
-var defaultConfig = {
-  repos: {},
-  storagePath: '/tmp/kpages',
-  port: 8765
-};
-
-var userConfig = R.merge(defaultConfig, require('./git-pages.config'));
+var userConfig = require('./src/config');
 var repoConfig = userConfig.repos;
-
-var defaultRepo = {
-  git: '',
-  branch: 'master',
-  index: 'index.html'
-};
-repoConfig = R.mapObj(R.merge(defaultRepo), repoConfig);
 
 console.log('Will serve pages for repos', R.keys(repoConfig).join(', '));
 
 app.get('/', function (req, res) {
   var jade = require('jade');
-  var render = jade.compileFile('./views/index.jade', { pretty: true });
+  var render = jade.compileFile(join(__dirname, './views/index.jade'), { pretty: true });
   console.log('git names', repoConfig);
   var html = render({ repos: repoConfig });
   res.send(html);
