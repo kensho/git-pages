@@ -15,12 +15,14 @@ Run after installing as a dependency (via package.json script)
 
 ```json
 "scripts": {
-    "git-pages": "git-pages"
+    "pages": "git-pages"
 },
 "dependencies": {
     "git-pages": "0.2.0"
 }
 ```
+
+Then you can start the `git-pages` server by simply `npm run pages`.
 
 Run from the cloned folder
 
