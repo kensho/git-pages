@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 /* global process, require */
 /* eslint new-cap: 0 */
 /* eslint no-console: 0 */
