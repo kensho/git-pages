@@ -4,18 +4,21 @@ html(lang="en")
     meta(charset="utf-8")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
     link(rel="stylesheet", href="//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.2/css/foundation.min.css")
+    script(src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.min.js")
+    script(src="app/git-pages-app.js")
     title git-pages
-  body
+  body(ng-app="git-pages")
     .row
-      .small-9.large-centered.columns
+      .small-12.large-centered.columns
         h1 git-pages
-        table
+        table(ng-controller="pullController")
           thead
             tr
               td(width="200") name
               td(width="300") git
               td branch
               td link
+              td pull
           tbody
             each repo, name in repos
               tr
@@ -25,3 +28,7 @@ html(lang="en")
                 td= repo.branch
                 td
                   a(href="./#{name}", target="_blank") open
+                td
+                  a(title="Pull latest code from the repo", ng-click="pull('#{name}')") pull
+
+

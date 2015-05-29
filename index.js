@@ -3,6 +3,9 @@
 /* global process, require */
 /* eslint new-cap: 0 */
 /* eslint no-console: 0 */
+require('lazy-ass');
+var check = require('check-more-types');
+
 var express = require('express');
 var morgan = require('morgan');
 
@@ -32,6 +35,10 @@ app.get('/', function (req, res) {
   var html = render({ repos: repoConfig });
   res.send(html);
 });
+app.get('/app/git-pages-app.js', function (req, res) {
+  var full = join(__dirname, './app/git-pages-app.js');
+  res.send(fs.readFileSync(full, 'utf8'));
+});
 
 var storagePath = userConfig.storagePath;
 if (!fs.existsSync(storagePath)) {
@@ -60,6 +67,9 @@ function cloneRepo(repoName, info) {
 }
 
 function pullRepo(repoName, branch) {
+  la(check.unemptyString(repoName), 'missing repo name', repoName);
+  la(check.unemptyString(branch), 'missing repo branch', repoName, branch);
+
   var repoPath = storagePath + repoName;
   var repo = git(repoPath);
   console.log('pulling repo %s in %s', quote(repoName), quote(repoPath));
@@ -72,7 +82,21 @@ function pullRepo(repoName, branch) {
 }
 
 app.get('/pull/:repo', function (req, res) {
-  pullRepo(req.params.repo).then(res.send.bind(res, 'OK'));
+  var name = req.params.repo;
+  if (!name) {
+    console.log('cannot pull repo without name', req.params);
+    return res.sendStatus(400);
+  }
+  console.log('received pull for repo %s', quote(name));
+  var config = repoConfig[name];
+  if (!config) {
+    console.log('cannot find repo %s', quote(name));
+    res.status(404).send('Cannot find repo ' + name);
+  }
+  pullRepo(name, config.branch)
+    .then(function () {
+      res.sendStatus(200);
+    });
 });
 
 var extensionRenderers = {
