@@ -28,6 +28,7 @@ var repoConfig = userConfig.repos;
 
 console.log('Will serve pages for repos', R.keys(repoConfig).join(', '));
 
+// index page application
 app.get('/', function (req, res) {
   var jade = require('jade');
   var render = jade.compileFile(join(__dirname, './views/index.jade'), { pretty: true });
@@ -37,6 +38,17 @@ app.get('/', function (req, res) {
 });
 app.get('/app/git-pages-app.js', function (req, res) {
   var full = join(__dirname, './app/git-pages-app.js');
+  res.type('.js');
+  res.send(fs.readFileSync(full, 'utf8'));
+});
+app.get('/app/dist/ng-alertify.js', function (req, res) {
+  var full = join(__dirname, './node_modules/ng-alertify/dist/ng-alertify.js');
+  res.type('.js');
+  res.send(fs.readFileSync(full, 'utf8'));
+});
+app.get('/app/dist/ng-alertify.css', function (req, res) {
+  var full = join(__dirname, './node_modules/ng-alertify/dist/ng-alertify.css');
+  res.type('.css');
   res.send(fs.readFileSync(full, 'utf8'));
 });
 

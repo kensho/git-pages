@@ -1,6 +1,6 @@
 {
   "name": "git-pages",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "Run your own github-like static pages",
   "main": "index.js",
   "bugs": {
@@ -29,6 +29,7 @@
     "lazy-ass": "0.5.8",
     "marked": "0.3.3",
     "morgan": "1.5.3",
+    "ng-alertify": "0.7.1",
     "q": "1.4.1",
     "quote": "0.4.0",
     "ramda": "0.14.0"
