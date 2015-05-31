@@ -1,11 +1,11 @@
 var quote = require('quote');
 var join = require('path').join;
+var getAppName = require('./app-name');
 
 function directToSubApp(req, res, next) {
   var from = req.headers.referer;
-  // something like http://localhost:8765/charts-lib
   console.log('req url %s path %s from %s', req.url, req.path, from);
-  var webApp = from.split('/')[3];
+  var webApp = getAppName(from);
   if (webApp) {
     console.log('web app name', quote(webApp));
     req.url = '/' + join(webApp, req.url);
