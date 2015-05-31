@@ -2,6 +2,21 @@
 
 > Run your own github-like static pages
 
+[![NPM][ng-describe-icon] ][ng-describe-url]
+
+[![Build status][git-pages-ci-image] ][git-pages-ci-url]
+[![dependencies][git-pages-dependencies-image] ][git-pages-dependencies-url]
+[![devdependencies][git-pages-devdependencies-image] ][git-pages-devdependencies-url]
+
+[git-pages-icon]: https://nodei.co/npm/git-pages.png?downloads=true
+[git-pages-url]: https://npmjs.org/package/git-pages
+[git-pages-ci-image]: https://travis-ci.org/kensho/git-pages.png?branch=master
+[git-pages-ci-url]: https://travis-ci.org/kensho/git-pages
+[git-pages-dependencies-image]: https://david-dm.org/kensho/git-pages.png
+[git-pages-dependencies-url]: https://david-dm.org/kensho/git-pages
+[git-pages-devdependencies-image]: https://david-dm.org/kensho/git-pages/dev-status.png
+[git-pages-devdependencies-url]: https://david-dm.org/kensho/git-pages#info=devDependencies
+
 ## Install
 
 * Install globally `npm install -g git-pages`
