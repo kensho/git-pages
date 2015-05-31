@@ -2,7 +2,7 @@
 
 > Run your own github-like static pages
 
-[![NPM][ng-describe-icon] ][ng-describe-url]
+[![NPM][git-pages-icon] ][git-pages-url]
 
 [![Build status][git-pages-ci-image] ][git-pages-ci-url]
 [![dependencies][git-pages-dependencies-image] ][git-pages-dependencies-url]
