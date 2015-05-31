@@ -12,7 +12,7 @@
   "preferGlobal": true,
   "homepage": "https://github.com/kensho/git-pages",
   "scripts": {
-    "test": "mocha --compilers js:mocha-traceur -R spec src/**/*-spec.es6",
+    "test": "mocha --compilers es6:mocha-traceur -R spec src/**/*-spec.es6",
     "start": "node index.js",
     "watch": "nodemon"
   },
