@@ -63,7 +63,7 @@ function fullGitUrl(name) {
 }
 
 function cloneRepo(repoName, info) {
-  var repoPath = storagePath + repoName;
+  var repoPath = join(storagePath, repoName);
   var repoCloned = Q(null);
   if (!fs.existsSync(repoPath)) {
     var url = fullGitUrl(info.git);
@@ -82,7 +82,7 @@ function pullRepo(repoName, branch) {
   la(check.unemptyString(repoName), 'missing repo name', repoName);
   la(check.unemptyString(branch), 'missing repo branch', repoName, branch);
 
-  var repoPath = storagePath + repoName;
+  var repoPath = join(storagePath, repoName);
   var repo = git(repoPath);
   console.log('pulling repo %s in %s', quote(repoName), quote(repoPath));
 
@@ -121,7 +121,7 @@ var extensionRenderers = {
 
 function repoRouteFor(repoName) {
   var repo = repoConfig[repoName];
-  var repoPath = storagePath + repoName;
+  var repoPath = join(storagePath, repoName);
   return function repoRoute(req, res) {
     var index = repoConfig[repoName].index;
     var full = join(repoPath, index);
@@ -151,7 +151,7 @@ Q.all(R.keys(repoConfig).map(function (repoName) {
 
   var PORT = process.env.PORT || userConfig.port;
   app.listen(PORT, '0.0.0.0');
-  console.log('Running on http://localhost:' + PORT);
+  console.log('Running on http://0.0.0.0:' + PORT);
 }).catch(function (err) {
   console.log(err);
   console.log(err.stack);
