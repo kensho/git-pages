@@ -84,9 +84,17 @@ function pullRepo(repoName, branch) {
 
   var repoPath = join(storagePath, repoName);
   var repo = git(repoPath);
-  console.log('pulling repo %s in %s', quote(repoName), quote(repoPath));
+  console.log('pulling repo %s repo path %s', quote(repoName), quote(repoPath));
+  console.log('working folder %s', process.cwd());
 
   return Q.ninvoke(repo, 'remote_fetch', 'origin')
+    .then(function () {
+      console.log('finished pulling repo %s', quote(repoName));
+    })
+    .catch(function (err) {
+      console.error('Error pulling repo %s\n  %s', repoName, err.message);
+      throw err;
+    })
     .then(function () {
       console.log('checking out branch %s in %s', branch, quote(repoName));
       return Q.ninvoke(repo, 'reset', 'origin/' + branch, {hard: true});
@@ -153,6 +161,6 @@ Q.all(R.keys(repoConfig).map(function (repoName) {
   app.listen(PORT, '0.0.0.0');
   console.log('Running on http://0.0.0.0:' + PORT);
 }).catch(function (err) {
-  console.log(err);
-  console.log(err.stack);
+  console.error('Caught a problem', err.message);
+  console.error(err.stack);
 });
