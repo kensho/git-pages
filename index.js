@@ -31,7 +31,7 @@ console.log('Will serve pages for repos', R.keys(repoConfig).join(', '));
 // index page application
 app.get('/', function (req, res) {
   var jade = require('jade');
-  var render = jade.compileFile(join(__dirname, './views/index.jade'), { pretty: true });
+  var render = jade.compileFile(join(__dirname, './app/index.jade'), { pretty: true });
   console.log('git names', repoConfig);
   var html = render({ repos: repoConfig });
   res.send(html);
