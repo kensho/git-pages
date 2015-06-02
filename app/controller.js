@@ -1,9 +1,17 @@
 var jade = require('jade');
 var join = require('path').join;
+var extname = require('path').extname;
 var R = require('ramda');
 var fromThisFolder = R.partial(join, __dirname);
 var fs = require('fs');
 var read = R.partialRight(fs.readFileSync, 'utf8');
+
+// url to local path resolution
+var dependencies = {
+  '/app/git-pages-app.js': './git-pages-app.js',
+  '/app/dist/ng-alertify.js': '../node_modules/ng-alertify/dist/ng-alertify.js',
+  '/app/dist/ng-alertify.css': '../node_modules/ng-alertify/dist/ng-alertify.css'
+};
 
 // index page application
 function indexApp(app, repoConfig) {
@@ -14,20 +22,14 @@ function indexApp(app, repoConfig) {
     var html = render({ repos: repoConfig });
     res.send(html);
   });
-  app.get('/app/git-pages-app.js', function (req, res) {
-    var full = fromThisFolder('./git-pages-app.js');
-    res.type('.js');
-    res.send(read(full));
-  });
-  app.get('/app/dist/ng-alertify.js', function (req, res) {
-    var full = fromThisFolder('../node_modules/ng-alertify/dist/ng-alertify.js');
-    res.type('.js');
-    res.send(read(full));
-  });
-  app.get('/app/dist/ng-alertify.css', function (req, res) {
-    var full = fromThisFolder('../node_modules/ng-alertify/dist/ng-alertify.css');
-    res.type('.css');
-    res.send(read(full));
+
+  R.keys(dependencies).forEach(function (url) {
+    var localPath = dependencies[url];
+    app.get(url, function (req, res) {
+      var full = fromThisFolder(localPath);
+      res.type(extname(localPath));
+      res.send(read(full));
+    });
   });
 }
 
