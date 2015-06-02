@@ -10,7 +10,9 @@ var read = R.partialRight(fs.readFileSync, 'utf8');
 var dependencies = {
   '/app/git-pages-app.js': './git-pages-app.js',
   '/app/dist/ng-alertify.js': '../node_modules/ng-alertify/dist/ng-alertify.js',
-  '/app/dist/ng-alertify.css': '../node_modules/ng-alertify/dist/ng-alertify.css'
+  '/app/dist/ng-alertify.css': '../node_modules/ng-alertify/dist/ng-alertify.css',
+  '/app/dist/ng-http-estimate.js': '../node_modules/ng-http-estimate/dist/ng-http-estimate.js',
+  '/app/dist/ng-http-estimate.css': '../node_modules/ng-http-estimate/dist/ng-http-estimate.css'
 };
 
 // index page application

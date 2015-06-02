@@ -3,14 +3,19 @@ html(lang="en")
   head
     meta(charset="utf-8")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
+
     link(rel="stylesheet", href="//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.2/css/foundation.min.css")
     link(rel="stylesheet", href="app/dist/ng-alertify.css")
+    link(rel="stylesheet", href="app/dist/ng-http-estimate.css")
+
     script(src="//code.jquery.com/jquery-2.1.4.min.js")
     script(src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.min.js")
     script(src="app/dist/ng-alertify.js")
+    script(src="app/dist/ng-http-estimate.js")
     script(src="app/git-pages-app.js")
     title git-pages
   body(ng-app="git-pages")
+    http-estimate
     .row
       .small-12.large-centered.columns
         h1 git-pages

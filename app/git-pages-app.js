@@ -1,5 +1,5 @@
 (function (angular) {
-  var m = angular.module('git-pages', ['Alertify']);
+  var m = angular.module('git-pages', ['Alertify', 'http-estimate']);
   m.controller('pullController', function ($scope, $http, Alertify) {
     $scope.pull = function pull(name) {
       console.log('pulling latest code for repo', name);
