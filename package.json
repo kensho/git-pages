@@ -1,6 +1,6 @@
 {
   "name": "git-pages",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "Run your own github-like static pages",
   "main": "index.js",
   "bugs": {
@@ -16,7 +16,7 @@
     "start": "node index.js",
     "watch": "nodemon"
   },
-  "author": "Martin Camacho",
+  "author": "Martin Camacho <martin@mcamac.com>",
   "contributors": [
     "Gleb Bahmutov <gleb.bahmutov@gmail.com>"
   ],
