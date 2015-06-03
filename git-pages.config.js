@@ -3,6 +3,9 @@
   For example, to serve demo.html from 'user/A' under /A
 
   module.exports = {
+    // possible additional settings
+    // covering hosting (local folder, port)
+
     repos: {
       'A': {
         git: 'user/A',
@@ -14,6 +17,9 @@
 */
 module.exports = {
   repos: {
+    'code-box': {
+      git: 'git@github.com:bahmutov/code-box.git'
+    },
     'local-angular-development': {
       git: 'bahmutov/local-angular-development',
       branch: 'gh-pages'
@@ -23,6 +29,6 @@ module.exports = {
       index: 'README.md'
     }
   },
-  storagePath: '/tmp/kpages',
-  port: 8765
+  storagePath: '/tmp/kpages', // local temp folder, optional
+  port: 8765 // serving port, optional
 };

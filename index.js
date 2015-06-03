@@ -36,9 +36,7 @@ if (!fs.existsSync(storagePath)) {
   fs.mkdirSync(storagePath);
 }
 
-function fullGitUrl(name) {
-  return 'git@github.com:' + name + '.git';
-}
+var fullGitUrl = require('./src/repo-url');
 
 function cloneRepo(repoName, info) {
   var repoPath = join(storagePath, repoName);

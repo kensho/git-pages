@@ -1,6 +1,6 @@
 {
   "name": "git-pages",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Run your own github-like static pages",
   "main": "index.js",
   "bugs": {
@@ -12,7 +12,7 @@
   "preferGlobal": true,
   "homepage": "https://github.com/kensho/git-pages",
   "scripts": {
-    "test": "mocha --compilers es6:mocha-traceur -R spec src/**/*-spec.es6",
+    "test": "mocha --compilers es6:mocha-traceur -R spec src/**/*-spec.es6 src/**/*-spec.js",
     "start": "node index.js",
     "watch": "nodemon"
   },
