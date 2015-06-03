@@ -15,6 +15,11 @@ describe('getting full git ulr', function () {
     la(check.git(full), full);
   });
 
+  it('foo-bar/baz', function () {
+    var full = fullUrl('foo-bar/baz');
+    la(check.git(full), full);
+  });
+
   it('resolves to full if git:', function () {
     var name = 'git@github.com:bahmutov/code-box.git';
     var full = fullUrl(name);

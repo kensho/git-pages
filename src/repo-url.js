@@ -3,7 +3,7 @@ var check = require('check-more-types');
 var quote = require('quote');
 
 function userRepoPair(str) {
-  var userRepo = /^\w+\/\w+$/;
+  var userRepo = /^[\w-]+\/[\w-]+$/;
   return check.unemptyString(str) &&
     userRepo.test(str);
 }
