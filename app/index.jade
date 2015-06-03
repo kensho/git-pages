@@ -3,10 +3,24 @@ html(lang="en")
   head
     meta(charset="utf-8")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    meta(name="version", content="#{pkg.version}")
 
     link(rel="stylesheet", href="//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.2/css/foundation.min.css")
     link(rel="stylesheet", href="app/dist/ng-alertify.css")
     link(rel="stylesheet", href="app/dist/ng-http-estimate.css")
+
+    style(type="text/css").
+      .smaller {
+        font-size: smaller;
+      }
+      footer {
+        position: absolute;
+        bottom: 0;
+      }
+      .faint {
+        color: #aaa;
+      }
+
 
     script(src="//code.jquery.com/jquery-2.1.4.min.js")
     script(src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.min.js")
@@ -38,5 +52,7 @@ html(lang="en")
                   a(href="./#{name}", target="_blank") open
                 td
                   a(title="Pull latest code from the repo", ng-click="pull('#{name}')") pull
+    .row
+      include partials/footer
 
 

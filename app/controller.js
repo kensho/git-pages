@@ -18,10 +18,16 @@ var dependencies = {
 // index page application
 function indexApp(app, repoConfig) {
 
+  var pkg = require('../package.json');
+
   app.get('/', function (req, res) {
     var render = jade.compileFile(fromThisFolder('./index.jade'), { pretty: true });
     console.log('git names', repoConfig);
-    var html = render({ repos: repoConfig });
+    var data = {
+      repos: repoConfig,
+      pkg: pkg
+    };
+    var html = render(data);
     res.send(html);
   });
 
