@@ -17,6 +17,8 @@
 [git-pages-devdependencies-image]: https://david-dm.org/kensho/git-pages/dev-status.png
 [git-pages-devdependencies-url]: https://david-dm.org/kensho/git-pages#info=devDependencies
 
+[Demo on Heroku](http://git-pages.herokuapp.com/) - might be asleep.
+
 We love [Github pages](https://pages.github.com/) - a great way to show small JS / HTML library in action.
 A lot of our public repos have them, but what about the private repos? There is no way (aside from 
 hostig [Github Enterprise](https://enterprise.github.com/features)) to have *privately hosted* static
