@@ -12,7 +12,6 @@ var morgan = require('morgan');
 var fs = require('fs');
 var Q = require('q');
 var R = require('ramda');
-var git = require('gift');
 var quote = require('quote');
 var join = require('path').join;
 var extname = require('path').extname;
@@ -26,6 +25,7 @@ app.use(morgan('dev'));
 var userConfig = require('./src/config');
 var repoConfig = userConfig.repos;
 
+
 console.log('Will serve pages for repos', R.keys(repoConfig).join(', '));
 
 require('./app/controller')(app, repoConfig);
@@ -36,46 +36,10 @@ if (!fs.existsSync(storagePath)) {
   fs.mkdirSync(storagePath);
 }
 
+var repoCommands = require('./src/repo')({
+  storagePath: storagePath
+});
 var fullGitUrl = R.partialRight(require('./src/repo-url'), userConfig.useHttps);
-
-function cloneRepo(repoName, info) {
-  var repoPath = join(storagePath, repoName);
-  var repoCloned = Q(null);
-  if (!fs.existsSync(repoPath)) {
-    var url = fullGitUrl(info.git);
-    console.log('cloning repo %s from %s to %s',
-      quote(repoName), quote(url), quote(repoPath));
-
-    repoCloned = Q.nfcall(git.clone, url, repoPath)
-      .catch(function (err) {
-        console.log('Error cloning:', repoName, err);
-      });
-  }
-  return repoCloned;
-}
-
-function pullRepo(repoName, branch) {
-  la(check.unemptyString(repoName), 'missing repo name', repoName);
-  la(check.unemptyString(branch), 'missing repo branch', repoName, branch);
-
-  var repoPath = join(storagePath, repoName);
-  var repo = git(repoPath);
-  console.log('pulling repo %s repo path %s', quote(repoName), quote(repoPath));
-  console.log('working folder %s', process.cwd());
-
-  return Q.ninvoke(repo, 'remote_fetch', 'origin')
-    .then(function () {
-      console.log('finished pulling repo %s', quote(repoName));
-    })
-    .catch(function (err) {
-      console.error('Error pulling repo %s\n  %s', repoName, err.message);
-      throw err;
-    })
-    .then(function () {
-      console.log('checking out branch %s in %s', branch, quote(repoName));
-      return Q.ninvoke(repo, 'reset', 'origin/' + branch, {hard: true});
-    });
-}
 
 app.get('/pull/:repo', function (req, res) {
   var name = req.params.repo;
@@ -89,7 +53,7 @@ app.get('/pull/:repo', function (req, res) {
     console.log('cannot find repo %s', quote(name));
     res.status(404).send('Cannot find repo ' + name);
   }
-  pullRepo(name, config.branch)
+  repoCommands.pull(name, config.branch)
     .then(function () {
       res.sendStatus(200);
     });
@@ -121,8 +85,8 @@ function repoRouteFor(repoName) {
 
 Q.all(R.keys(repoConfig).map(function (repoName) {
   var repo = repoConfig[repoName];
-  var repoMerged = cloneRepo(repoName, repo).then(function () {
-    return pullRepo(repoName, repo.branch);
+  var repoMerged = repoCommands.clone(repoName, repo).then(function () {
+    return repoCommands.pull(repoName, repo.branch);
   }).then(function () {
     console.log('setting up route for repo', quote(repoName));
     app.get('/' + repoName, repoRouteFor(repoName));

@@ -31,6 +31,7 @@
     "morgan": "1.5.3",
     "ng-alertify": "0.7.1",
     "ng-http-estimate": "0.6.0",
+    "promised-exec": "1.0.1",
     "q": "1.4.1",
     "quote": "0.4.0",
     "ramda": "0.14.0"
