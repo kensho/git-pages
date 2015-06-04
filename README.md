@@ -25,8 +25,8 @@ repos into a config file and start using Node.
 
 ![git-pages screenshot](images/screenshot.png)
 
-The main index page shows list of pulled repos. Click on the "link" to open statically hosted
-web application pointing at the desired branch. Click "pull" to fetch the latest code.
+The main index page shows list of pulled repos. Click on the "open" link to open the statically hosted
+site pointing at the desired branch. Click "pull" to fetch the latest code.
 
 ## Install
 
