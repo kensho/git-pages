@@ -18,7 +18,7 @@ var defaultConfig = {
   repos: {},
   storagePath: '/tmp/kpages',
   port: 8765,
-  useHttps: false
+  useHttps: false,
 };
 
 var foundConfigFilename = firstFoundConfig('git-pages.config.js');
@@ -30,7 +30,8 @@ var userConfig = R.merge(defaultConfig, require(foundConfigFilename));
 var defaultRepo = {
   git: '',
   branch: 'master',
-  index: 'index.html'
+  index: 'index.html',
+  exec: ''
 };
 
 userConfig.repos = R.mapObj(R.merge(defaultRepo), userConfig.repos);

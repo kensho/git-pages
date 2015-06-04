@@ -21,6 +21,7 @@ function cloneRepo(storagePath, toFullUrl, repoName, info) {
       quote(repoName), quote(url), quote(repoPath));
 
     repoCloned = Q.nfcall(git.clone, url, repoPath)
+      .then(R.always(repoPath))
       .catch(function (err) {
         console.log('Error cloning:', repoName, err);
         throw err;
@@ -49,8 +50,40 @@ function pullRepo(storagePath, repoName, branch) {
     .then(function () {
       console.log('checking out branch %s in %s', branch, quote(repoName));
       return Q.ninvoke(repo, 'reset', 'origin/' + branch, {hard: true});
+    })
+    .then(function () {
+      console.log('returning full path', repoPath);
+      return repoPath;
     });
 }
+
+function formExec(command, localPath) {
+  la(check.maybe.unemptyString(command), 'invalid repo exec command', command);
+  la(check.unemptyString(localPath), 'missing local path', localPath);
+
+  if (!command) {
+    return Q.when();
+  }
+  var chdir = require('chdir-promise');
+  var exec = require('promised-exec');
+
+  if (check.unemptyString(command)) {
+    console.log('exec %s in %s', quote(command), localPath);
+    return chdir.to(localPath)
+      .then(R.partial(exec, command))
+      .then(console.log.bind(console))
+      .then(chdir.back);
+  }
+
+  return Q.when();
+}
+
+function shellCommand(repoConfig, localPath) {
+  la(check.unemptyString(localPath), 'expected local path', localPath);
+  var step = formExec(repoConfig, localPath);
+  la(check.promise(step), 'expected to form a promise');
+  return step;
+};
 
 module.exports = function init(options) {
   la(check.object(options), 'missing options');
@@ -59,6 +92,7 @@ module.exports = function init(options) {
 
   return {
     clone: R.partial(cloneRepo, options.storagePath, fullGitUrl),
-    pull: R.partial(pullRepo, options.storagePath)
+    pull: R.partial(pullRepo, options.storagePath),
+    shell: shellCommand
   };
 };

@@ -50,7 +50,8 @@ module.exports = {
       // or the full HTTPS url
       // git: 'https://github.com/bahmutov/code-box.git',
       // pick the index page from the repo, supports HTML, Markdown, Jade
-      index: 'demo.html' // default is index.html
+      index: 'demo.html' // default is index.html,
+      exec: 'npm install' // command to execute after pulling latest code, optional
     },
     'local-angular': {
       git: 'bahmutov/local-angular-development',
@@ -93,7 +94,7 @@ Uses [nodemon](http://nodemon.io/).
 ## Todo
 
 * [ ] webhook to allow pulling on commit
-* [ ] execute shell commands after pulling, for example `npm install` or `bower install`
+* [x] execute shell commands after pulling, for example `npm install` or `bower install`
 * [x] form full SSH or HTTPS urls from user / repo name pair
 
 ### Small print

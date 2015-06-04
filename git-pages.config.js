@@ -17,6 +17,7 @@
 */
 module.exports = {
   repos: {
+    /*
     'code-box': {
       // can use full git SSH url
       // git: 'git@github.com:bahmutov/code-box.git'
@@ -24,15 +25,16 @@ module.exports = {
       git: 'https://github.com/bahmutov/code-box.git'
       // or just username/repo (assumes github in this case)
       // git: 'bahmutov/code-box'
-    },
+    },*/
     'local-angular-development': {
       git: 'bahmutov/local-angular-development',
-      branch: 'gh-pages'
-    },
+      branch: 'gh-pages',
+      exec: 'npm version'
+    },/*
     'git-pages': {
       git: 'kensho/git-pages',
       index: 'README.md'
-    }
+    }*/
   },
   storagePath: '/tmp/kpages', // local temp folder, optional
   port: 8765, // serving port, optional

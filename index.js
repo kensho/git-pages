@@ -52,10 +52,13 @@ app.get('/pull/:repo', function (req, res) {
     console.log('cannot find repo %s', quote(name));
     res.status(404).send('Cannot find repo ' + name);
   }
+  // no need to clone, the repo is already there
+  var shell = R.partial(repoCommands.shell, config.exec);
+  var sendOk = res.sendStatus.bind(res, 200);
+
   repoCommands.pull(name, config.branch)
-    .then(function () {
-      res.sendStatus(200);
-    });
+    .then(shell)
+    .then(sendOk);
 });
 
 var extensionRenderers = {
@@ -85,12 +88,15 @@ Q.all(R.keys(repoConfig).map(function (repoName) {
   var repo = repoConfig[repoName];
   var clone = R.partial(repoCommands.clone, repoName, repo);
   var pull = R.partial(repoCommands.pull, repoName, repo.branch);
+  var shell = R.partial(repoCommands.shell, repo.exec);
+
   var route = function route() {
     console.log('setting up route for repo', quote(repoName));
     app.get('/' + repoName, repoRouteFor(repoName));
   };
 
-  return R.pipeP(clone, pull, route)();
+  return R.pipeP(clone, pull, shell, route)();
+
 })).then(function () {
 
   app.use(directToSubApp);
@@ -102,4 +108,4 @@ Q.all(R.keys(repoConfig).map(function (repoName) {
 }).catch(function (err) {
   console.error('Caught a problem', err.message);
   console.error(err.stack);
-});
+}).done();
