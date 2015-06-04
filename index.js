@@ -84,6 +84,8 @@ function repoRouteFor(repoName) {
   };
 }
 
+// TODO: process each repo in order, not all at once
+// to avoid multiple commands trying to execute in separate folders
 Q.all(R.keys(repoConfig).map(function (repoName) {
   var repo = repoConfig[repoName];
   var clone = R.partial(repoCommands.clone, repoName, repo);
@@ -97,11 +99,10 @@ Q.all(R.keys(repoConfig).map(function (repoName) {
 
   return R.pipeP(clone, pull, shell, route)();
 
-})).then(function () {
-
+})).then(function setupSubapps() {
   app.use(directToSubApp);
   app.use(express.static(storagePath));
-
+}).then(function start() {
   var PORT = process.env.PORT || userConfig.port;
   app.listen(PORT, '0.0.0.0');
   console.log('Running on http://0.0.0.0:' + PORT);

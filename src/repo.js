@@ -58,7 +58,7 @@ function pullRepo(storagePath, repoName, branch) {
 }
 
 function formExec(command, localPath) {
-  la(check.maybe.unemptyString(command), 'invalid repo exec command', command);
+  la(check.maybe.string(command), 'invalid repo exec command', command);
   la(check.unemptyString(localPath), 'missing local path', localPath);
 
   if (!command) {
