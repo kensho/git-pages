@@ -17,10 +17,48 @@
 [git-pages-devdependencies-image]: https://david-dm.org/kensho/git-pages/dev-status.png
 [git-pages-devdependencies-url]: https://david-dm.org/kensho/git-pages#info=devDependencies
 
+We love [Github pages](https://pages.github.com/) - a great way to show small JS / HTML library in action.
+A lot of our public repos have them, but what about the private repos? There is no way (aside from 
+hostig [Github Enterprise](https://enterprise.github.com/features)) to have *privately hosted* static
+pages from a list of your private repos. Unless you use **git-pages**! Just install, put names of
+repos into a config file and start using Node.
+
+![git-pages screenshot](images/screenshot.png)
+
+The main index page shows list of pulled repos. Click on the "link" to open statically hosted
+web application pointing at the desired branch. Click "pull" to fetch the latest code.
+
 ## Install
 
-* Install globally `npm install -g git-pages`
-* Install as a dependency `npm install --save git-pages`
+* Install globally `npm install -g git-pages` to run as a CLI in any folder
+* Install as a dependency `npm install --save git-pages` to start as NPM script from another project
+
+## Configure
+
+Create `git-pages.configure.js` file that exports the configuration options, for example,
+here are 2 repos to be hosted under `http://localhost:8765/code-box` and
+`http://localhost:8765/local-angular`.
+
+```js
+module.exports = {
+  repos: {
+    'code-box': {
+      // you can use full git@ url
+      git: 'git@github.com:bahmutov/code-box.git',
+      // pick the index page from the repo, supports HTML, Markdown, Jade
+      index: 'demo.html' // default is index.html
+    },
+    'local-angular': {
+      git: 'bahmutov/local-angular-development',
+      branch: 'gh-pages' // pick branch other than master
+    }
+  },
+  storagePath: '/tmp/kpages', // local temp folder, optional
+  port: 8765 // serving port, optional
+};
+```
+
+For our example, see [git-pages.config.js](git-pages.config.js)
 
 ## Run
 
@@ -44,6 +82,11 @@ Run from the cloned folder
 * simple start `node index.js` or `npm run start`
 * run with automatic restart and watching source files `npm run watch`. 
 Uses [nodemon](http://nodemon.io/).
+
+## Todo
+
+* [ ] webhook to allow pulling on commit
+* [ ] execute shell commands after pulling, for example `npm install` or `bower install`
 
 ### Small print
 
