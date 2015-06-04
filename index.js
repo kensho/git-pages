@@ -36,7 +36,7 @@ if (!fs.existsSync(storagePath)) {
   fs.mkdirSync(storagePath);
 }
 
-var fullGitUrl = require('./src/repo-url');
+var fullGitUrl = R.partialRight(require('./src/repo-url'), userConfig.useHttps);
 
 function cloneRepo(repoName, info) {
   var repoPath = join(storagePath, repoName);

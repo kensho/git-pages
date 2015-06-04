@@ -45,6 +45,8 @@ module.exports = {
     'code-box': {
       // you can use full git@ url
       git: 'git@github.com:bahmutov/code-box.git',
+      // or the full HTTPS url
+      // git: 'https://github.com/bahmutov/code-box.git',
       // pick the index page from the repo, supports HTML, Markdown, Jade
       index: 'demo.html' // default is index.html
     },
@@ -59,6 +61,9 @@ module.exports = {
 ```
 
 For our example, see [git-pages.config.js](git-pages.config.js)
+
+Note: some hosting environments, like Heroku do not support pulling repos via SSH without additional setup, 
+thus they require HTTPS git urls.
 
 ## Run
 
@@ -87,6 +92,7 @@ Uses [nodemon](http://nodemon.io/).
 
 * [ ] webhook to allow pulling on commit
 * [ ] execute shell commands after pulling, for example `npm install` or `bower install`
+* [x] form full SSH or HTTPS urls from user / repo name pair
 
 ### Small print
 

@@ -17,7 +17,8 @@ function firstFoundConfig(name) {
 var defaultConfig = {
   repos: {},
   storagePath: '/tmp/kpages',
-  port: 8765
+  port: 8765,
+  useHttps: false
 };
 
 var foundConfigFilename = firstFoundConfig('git-pages.config.js');

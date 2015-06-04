@@ -24,7 +24,7 @@ module.exports = {
       git: 'https://github.com/bahmutov/code-box.git'
       // or just username/repo (assumes github in this case)
       // git: 'bahmutov/code-box'
-    }/*,
+    },
     'local-angular-development': {
       git: 'bahmutov/local-angular-development',
       branch: 'gh-pages'
@@ -32,8 +32,9 @@ module.exports = {
     'git-pages': {
       git: 'kensho/git-pages',
       index: 'README.md'
-    }*/
+    }
   },
   storagePath: '/tmp/kpages', // local temp folder, optional
-  port: 8765 // serving port, optional
+  port: 8765, // serving port, optional
+  useHttps: true // form full urls from user / repo using ssh or https
 };
