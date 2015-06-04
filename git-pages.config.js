@@ -18,7 +18,10 @@
 module.exports = {
   repos: {
     'code-box': {
-      git: 'git@github.com:bahmutov/code-box.git'
+      // can use full git url
+      // git: 'git@github.com:bahmutov/code-box.git'
+      // or just username/repo (assumes github in this case)
+      git: 'bahmutov/code-box'
     },
     'local-angular-development': {
       git: 'bahmutov/local-angular-development',
