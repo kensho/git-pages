@@ -6,15 +6,17 @@ var Q = require('q');
 var R = require('ramda');
 var fs = require('fs');
 var exists = fs.existsSync;
+var git = require('gift');
 
-function cloneRepo(storagePath, repoName, info) {
+function cloneRepo(storagePath, toFullUrl, repoName, info) {
   la(check.unemptyString(storagePath), 'missing storage path', storagePath);
   la(check.unemptyString(repoName), 'missing repo name', repoName);
+  la(check.fn(toFullUrl), 'expected full url function', toFullUrl);
 
   var repoPath = join(storagePath, repoName);
   var repoCloned = Q(null);
   if (!exists(repoPath)) {
-    var url = fullGitUrl(info.git);
+    var url = toFullUrl(info.git);
     console.log('cloning repo %s from %s to %s',
       quote(repoName), quote(url), quote(repoPath));
 
@@ -28,8 +30,6 @@ function cloneRepo(storagePath, repoName, info) {
 }
 
 function pullRepo(storagePath, repoName, branch) {
-  var git = require('gift');
-
   la(check.unemptyString(repoName), 'missing repo name', repoName);
   la(check.unemptyString(branch), 'missing repo branch', repoName, branch);
 
@@ -55,8 +55,10 @@ function pullRepo(storagePath, repoName, branch) {
 module.exports = function init(options) {
   la(check.object(options), 'missing options');
 
+  var fullGitUrl = R.partialRight(require('./repo-url'), options.useHttps);
+
   return {
-    clone: R.partial(cloneRepo, options.storagePath),
+    clone: R.partial(cloneRepo, options.storagePath, fullGitUrl),
     pull: R.partial(pullRepo, options.storagePath)
   };
 };

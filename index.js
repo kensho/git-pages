@@ -25,7 +25,6 @@ app.use(morgan('dev'));
 var userConfig = require('./src/config');
 var repoConfig = userConfig.repos;
 
-
 console.log('Will serve pages for repos', R.keys(repoConfig).join(', '));
 
 require('./app/controller')(app, repoConfig);
@@ -37,9 +36,9 @@ if (!fs.existsSync(storagePath)) {
 }
 
 var repoCommands = require('./src/repo')({
-  storagePath: storagePath
+  storagePath: storagePath,
+  useHttps: userConfig.useHttps
 });
-var fullGitUrl = R.partialRight(require('./src/repo-url'), userConfig.useHttps);
 
 app.get('/pull/:repo', function (req, res) {
   var name = req.params.repo;
@@ -82,16 +81,16 @@ function repoRouteFor(repoName) {
   };
 }
 
-
 Q.all(R.keys(repoConfig).map(function (repoName) {
   var repo = repoConfig[repoName];
-  var repoMerged = repoCommands.clone(repoName, repo).then(function () {
-    return repoCommands.pull(repoName, repo.branch);
-  }).then(function () {
+  var clone = R.partial(repoCommands.clone, repoName, repo);
+  var pull = R.partial(repoCommands.pull, repoName, repo.branch);
+  var route = function route() {
     console.log('setting up route for repo', quote(repoName));
     app.get('/' + repoName, repoRouteFor(repoName));
-  });
-  return repoMerged;
+  };
+
+  return R.pipeP(clone, pull, route)();
 })).then(function () {
 
   app.use(directToSubApp);
