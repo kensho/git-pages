@@ -1,6 +1,6 @@
 {
   "name": "git-pages",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Run your own github-like static pages",
   "main": "index.js",
   "bugs": {
