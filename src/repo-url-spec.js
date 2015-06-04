@@ -26,6 +26,12 @@ describe('getting full git ulr', function () {
     la(full === name, 'full', full, 'does not match input', name);
   });
 
+  it('resolves to full if https:', function () {
+    var name = 'https://github.com/foo/bar.git';
+    var full = fullUrl(name);
+    la(full === name, 'full', full, 'does not match input', name);
+  });
+
   it('throws if not user / repo pair', function () {
     la(check.raises(function () {
       var name = 'foo/bar/baz';
