@@ -98,13 +98,17 @@ function fetchRepo(repoName) {
   var pull = R.partial(repoCommands.pull, repoName, repo.branch);
   var shell = R.partial(repoCommands.shell, repo.exec);
   var commitId = R.partial(repoCommands.lastCommitId, repoName);
+  function rememberCommit(commit) {
+    la(check.commitId(commit), 'expected commit for', repoName, 'got', commit);
+    repo.commit = commit;
+  }
 
   var route = function route() {
     console.log('setting up route for repo', quote(repoName));
     app.get('/' + repoName, repoRouteFor(repoName));
   };
 
-  return R.pipeP(clone, pull, shell, commitId, route)();
+  return R.pipeP(clone, pull, shell, commitId, rememberCommit, route)();
 }
 
 var repos = R.keys(repoConfig);

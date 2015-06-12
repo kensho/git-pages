@@ -44,6 +44,7 @@ html(lang="en")
               td branch
               td link
               td pull
+              td commit
           tbody
             each repo, name in repos
               tr
@@ -57,6 +58,7 @@ html(lang="en")
                   a(href="./#{name}", target="_blank", title="Open the static page in the new tab") open
                 td
                   a(title="Pull latest code from the repo", ng-click="pull('#{name}')") pull
+                td= repo.commit.substr(0, 7)
     .row
       include partials/footer
 
