@@ -54,11 +54,16 @@ app.get('/pull/:repo', function (req, res) {
   }
   // no need to clone, the repo is already there
   var shell = R.partial(repoCommands.shell, config.exec);
-  var sendOk = res.sendStatus.bind(res, 200);
+  function sendOk(commit) {
+    la(check.commitId(commit), 'expected commit id', commit);
+    res.status(200).send(commit).end();
+  };
 
   repoCommands.pull(name, config.branch)
     .then(shell)
-    .then(sendOk);
+    .then(R.partial(repoCommands.lastCommitId, name))
+    .then(sendOk)
+    .done();
 });
 
 var extensionRenderers = {
@@ -86,27 +91,39 @@ function repoRouteFor(repoName) {
 
 // TODO: process each repo in order, not all at once
 // to avoid multiple commands trying to execute in separate folders
-Q.all(R.keys(repoConfig).map(function (repoName) {
+function fetchRepo(repoName) {
+  la(check.unemptyString(repoName), 'missing repo name', repoName);
   var repo = repoConfig[repoName];
   var clone = R.partial(repoCommands.clone, repoName, repo);
   var pull = R.partial(repoCommands.pull, repoName, repo.branch);
   var shell = R.partial(repoCommands.shell, repo.exec);
+  var commitId = R.partial(repoCommands.lastCommitId, repoName);
 
   var route = function route() {
     console.log('setting up route for repo', quote(repoName));
     app.get('/' + repoName, repoRouteFor(repoName));
   };
 
-  return R.pipeP(clone, pull, shell, route)();
+  return R.pipeP(clone, pull, shell, commitId, route)();
+}
 
-})).then(function setupSubapps() {
-  app.use(directToSubApp);
-  app.use(express.static(storagePath));
-}).then(function start() {
-  var PORT = process.env.PORT || userConfig.port;
-  app.listen(PORT, '0.0.0.0');
-  console.log('Running on http://0.0.0.0:' + PORT);
-}).catch(function (err) {
-  console.error('Caught a problem', err.message);
-  console.error(err.stack);
-}).done();
+var repos = R.keys(repoConfig);
+var fetchReposOneByOne =
+  repos
+    .map(function (name) {
+      return R.partial(fetchRepo, name);
+    })
+    .reduce(Q.when, Q());
+
+fetchReposOneByOne
+  .then(function setupSubapps() {
+    app.use(directToSubApp);
+    app.use(express.static(storagePath));
+  }).then(function start() {
+    var PORT = process.env.PORT || userConfig.port;
+    app.listen(PORT, '0.0.0.0');
+    console.log('Running on http://0.0.0.0:' + PORT);
+  }).catch(function (err) {
+    console.error('Caught a problem', err.message);
+    console.error(err.stack);
+  }).done();

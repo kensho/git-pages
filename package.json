@@ -25,6 +25,7 @@
     "chdir-promise": "0.2.1",
     "check-more-types": "1.7.2",
     "express": "4.12.3",
+    "ggit": "0.13.0",
     "gift": "0.6.0",
     "jade": "1.10.0",
     "lazy-ass": "0.5.8",

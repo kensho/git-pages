@@ -7,6 +7,8 @@ var R = require('ramda');
 var fs = require('fs');
 var exists = fs.existsSync;
 var git = require('gift');
+var ggit = require('ggit');
+var chdir = require('chdir-promise');
 
 function cloneRepo(storagePath, toFullUrl, repoName, info) {
   la(check.unemptyString(storagePath), 'missing storage path', storagePath);
@@ -57,6 +59,13 @@ function pullRepo(storagePath, repoName, branch) {
     });
 }
 
+function lastCommitId(storagePath, repoName) {
+  var repoPath = join(storagePath, repoName);
+  return chdir.to(repoPath)
+    .then(ggit.lastCommitId)
+    .tap(chdir.back);
+}
+
 function formExec(command, localPath) {
   la(check.maybe.string(command), 'invalid repo exec command', command);
   la(check.unemptyString(localPath), 'missing local path', localPath);
@@ -93,6 +102,7 @@ module.exports = function init(options) {
   return {
     clone: R.partial(cloneRepo, options.storagePath, fullGitUrl),
     pull: R.partial(pullRepo, options.storagePath),
+    lastCommitId: R.partial(lastCommitId, options.storagePath),
     shell: shellCommand
   };
 };
