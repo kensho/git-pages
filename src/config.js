@@ -1,6 +1,7 @@
 var exists = require('fs').existsSync;
 var join = require('path').join;
 var R = require('ramda');
+var check = require('check-more-types');
 
 function firstFoundConfig(name) {
   var full = join(process.cwd(), name);
@@ -37,7 +38,12 @@ function mergeCliWithConfig(options) {
     exec: ''
   };
 
-  userConfig.repos = R.mapObj(R.merge(defaultRepo), userConfig.repos);
+  if (check.object(options) &&
+    check.not.empty(options)) {
+    console.log('using command line options', options);
+  } else {
+    userConfig.repos = R.mapObj(R.merge(defaultRepo), userConfig.repos);
+  }
   return userConfig;
 }
 

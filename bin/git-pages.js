@@ -5,7 +5,10 @@
 /* eslint no-console: 0 */
 require('lazy-ass');
 var check = require('check-more-types');
+var R = require('ramda');
 var pkg = require('../package.json');
+console.log('%s@%s - %s', pkg.name, pkg.version, pkg.description);
+
 require('update-notifier')({
   packageName: pkg.name,
   packageVersion: pkg.version
@@ -27,11 +30,19 @@ var shortHands = {
 }
 var cliOptions = nopt(knownOptions, shortHands, process.argv);
 if (cliOptions.help) {
-  console.log('%s@%s - %s', pkg.name, pkg.version, pkg.description);
   process.exit(0);
 }
 
+if (check.not.unemptyString(cliOptions.repo)) {
+  console.error('missing repo');
+  process.exit(1);
+}
+
 var gitPages = require('..');
-gitPages(cliOptions);
+gitPages({
+  git: cliOptions.repo,
+  branch: cliOptions.branch,
+  index: cliOptions.index
+});
 
 
