@@ -13,26 +13,32 @@ function firstFoundConfig(name) {
   }
 }
 
-// TODO read run config using nconf
-var defaultConfig = {
-  repos: {},
-  storagePath: '/tmp/kpages',
-  port: 8765,
-  useHttps: false,
-};
+function mergeCliWithConfig(options) {
+  options = options || {};
 
-var foundConfigFilename = firstFoundConfig('git-pages.config.js');
-if (!foundConfigFilename) {
-  throw new Error('Cannot find the config file');
+  // TODO read run config using nconf
+  var defaultConfig = {
+    repos: {},
+    storagePath: '/tmp/kpages',
+    port: 8765,
+    useHttps: false,
+  };
+
+  var foundConfigFilename = firstFoundConfig('git-pages.config.js');
+  if (!foundConfigFilename) {
+    throw new Error('Cannot find the config file');
+  }
+  var userConfig = R.merge(defaultConfig, require(foundConfigFilename));
+
+  var defaultRepo = {
+    git: '',
+    branch: 'master',
+    index: 'index.html',
+    exec: ''
+  };
+
+  userConfig.repos = R.mapObj(R.merge(defaultRepo), userConfig.repos);
+  return userConfig;
 }
-var userConfig = R.merge(defaultConfig, require(foundConfigFilename));
 
-var defaultRepo = {
-  git: '',
-  branch: 'master',
-  index: 'index.html',
-  exec: ''
-};
-
-userConfig.repos = R.mapObj(R.merge(defaultRepo), userConfig.repos);
-module.exports = userConfig;
+module.exports = R.once(mergeCliWithConfig);

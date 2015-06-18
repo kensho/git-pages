@@ -6,6 +6,9 @@ var check = require('check-more-types');
 /* eslint no-console: 0 */
 function gitPages(options) {
 
+  var userConfig = require('./src/config')(options);
+  var repoConfig = userConfig.repos;
+
   var express = require('express');
   var morgan = require('morgan');
 
@@ -21,9 +24,6 @@ function gitPages(options) {
 
   var app = express();
   app.use(morgan('dev'));
-
-  var userConfig = require('./src/config');
-  var repoConfig = userConfig.repos;
 
   console.log('Will serve pages for repos', R.keys(repoConfig).join(', '));
 
@@ -134,3 +134,7 @@ function gitPages(options) {
 }
 
 module.exports = gitPages;
+
+if (!module.parent) {
+  throw new Error('Please run from another module, or use bin script');
+}
