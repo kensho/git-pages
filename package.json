@@ -1,13 +1,13 @@
 {
   "name": "git-pages",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Run your own github-like static pages",
   "main": "index.js",
   "bugs": {
     "url": "https://github.com/kensho/git-pages/issues"
   },
   "bin": {
-    "git-pages": "./index.js"
+    "git-pages": "./bin/git-pages.js"
   },
   "preferGlobal": true,
   "homepage": "https://github.com/kensho/git-pages",
@@ -33,10 +33,12 @@
     "morgan": "1.5.3",
     "ng-alertify": "0.7.1",
     "ng-http-estimate": "0.6.0",
+    "nopt": "3.0.2",
     "promised-exec": "1.0.1",
     "q": "1.4.1",
     "quote": "0.4.0",
-    "ramda": "0.14.0"
+    "ramda": "0.14.0",
+    "update-notifier": "0.5.0"
   },
   "devDependencies": {
     "mocha": "2.2.5",

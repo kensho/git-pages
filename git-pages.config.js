@@ -33,6 +33,10 @@ module.exports = {
       git: 'kensho/git-pages',
       index: 'README.md',
       exec: 'npm version'
+    },
+    'ndc2015-testjs': {
+      git: 'git@github.com:kubawalinski/ndc2015-testjs.git',
+      index: 'slides-testjs.html'
     }
   },
   storagePath: '/tmp/kpages', // local temp folder, optional
