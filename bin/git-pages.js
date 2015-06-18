@@ -16,13 +16,15 @@ require('update-notifier')({
 
 var nopt = require('nopt');
 var knownOptions = {
-  repo: [String, null],
-  branch: [String, 'master'],
-  index: [String, 'index.html'],
+  repo: String,
+  branch: String,
+  index: String,
   help: Boolean
 };
 var shortHands = {
   r: ['--repo'],
+  git: ['--repo'],
+  g: ['--repo'],
   b: ['--branch'],
   i: ['--index'],
   p: ['--index'],
@@ -33,16 +35,18 @@ if (cliOptions.help) {
   process.exit(0);
 }
 
-if (check.not.unemptyString(cliOptions.repo)) {
-  console.error('missing repo');
-  process.exit(1);
-}
-
 var gitPages = require('..');
-gitPages({
-  git: cliOptions.repo,
-  branch: cliOptions.branch,
-  index: cliOptions.index
-});
+if (process.argv.length > 2) {
+  if (check.not.unemptyString(cliOptions.repo)) {
+    console.error('missing repo');
+    process.exit(1);
+  }
 
-
+  gitPages({
+    git: cliOptions.repo,
+    branch: cliOptions.branch,
+    index: cliOptions.index
+  });
+} else {
+  gitPages();
+}

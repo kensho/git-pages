@@ -40,7 +40,12 @@ function mergeCliWithConfig(options) {
 
   if (check.object(options) &&
     check.not.empty(options)) {
+    options = R.pickBy(check.defined, options);
     console.log('using command line options', options);
+    userConfig.repos = {
+      repo: R.merge(defaultRepo, options)
+    };
+    console.log(userConfig.repos);
   } else {
     userConfig.repos = R.mapObj(R.merge(defaultRepo), userConfig.repos);
   }

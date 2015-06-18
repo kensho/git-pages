@@ -35,6 +35,16 @@ site pointing at the desired branch. Click "pull" to fetch the latest code.
 * Install globally `npm install -g git-pages` to run as a CLI in any folder
 * Install as a dependency `npm install --save git-pages` to start as NPM script from another project
 
+## Serve single repo
+
+If you just need to pull a repo and statically serve a single file, use command line arguments.
+For example to serve the RevealJs presentation from https://github.com/kubawalinski/ndc2015-testjs
+you can execute this command
+
+    git-pages --repo git@github.com:kubawalinski/ndc2015-testjs.git --page slides-testjs.html
+
+Run `git-pages --help` to see all options and shortcuts.
+
 ## Configure
 
 Create `git-pages.configure.js` file that exports the configuration options, for example,
