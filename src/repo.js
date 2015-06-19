@@ -7,6 +7,7 @@ var R = require('ramda');
 var fs = require('fs');
 var exists = fs.existsSync;
 var git = require('gift');
+var gitlog = require('gitlog');
 var ggit = require('ggit');
 var chdir = require('chdir-promise');
 
@@ -66,6 +67,16 @@ function lastCommitId(storagePath, repoName) {
     .tap(chdir.back);
 }
 
+function lastCommit(storagePath, repoName) {
+  var repoPath = join(storagePath, repoName);
+  var logOpts = {
+    repo: repoPath,
+    number: 1,
+    fields: ['hash', 'subject', 'committerDateRel']
+  };
+  return Q.nfcall(gitlog, logOpts).then(R.prop(0));
+}
+
 function formExec(command, localPath) {
   la(check.maybe.string(command), 'invalid repo exec command', command);
   la(check.unemptyString(localPath), 'missing local path', localPath);
@@ -103,6 +114,7 @@ module.exports = function init(options) {
     clone: R.partial(cloneRepo, options.storagePath, fullGitUrl),
     pull: R.partial(pullRepo, options.storagePath),
     lastCommitId: R.partial(lastCommitId, options.storagePath),
+    lastCommit: R.partial(lastCommit, options.storagePath),
     shell: shellCommand
   };
 };

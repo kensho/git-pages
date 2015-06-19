@@ -55,13 +55,14 @@ function gitPages(options) {
     // no need to clone, the repo is already there
     var shell = R.partial(repoCommands.shell, config.exec);
     function sendOk(commit) {
-      la(check.commitId(commit), 'expected commit id', commit);
+      la(check.object(commit), 'expected commit obj for', name, 'got', commit);
+      la(check.commitId(commit.hash), 'expected commit for', name, 'got', commit);
       res.status(200).send(commit).end();
     };
 
     repoCommands.pull(name, config.branch)
       .then(shell)
-      .then(R.partial(repoCommands.lastCommitId, name))
+      .then(R.partial(repoCommands.lastCommit, name))
       .then(sendOk)
       .done();
   });
@@ -97,9 +98,10 @@ function gitPages(options) {
     var clone = R.partial(repoCommands.clone, repoName, repo);
     var pull = R.partial(repoCommands.pull, repoName, repo.branch);
     var shell = R.partial(repoCommands.shell, repo.exec);
-    var commitId = R.partial(repoCommands.lastCommitId, repoName);
+    var commitId = R.partial(repoCommands.lastCommit, repoName);
     function rememberCommit(commit) {
-      la(check.commitId(commit), 'expected commit for', repoName, 'got', commit);
+      la(check.object(commit), 'expected commit obj for', repoName, 'got', commit);
+      la(check.commitId(commit.hash), 'expected commit for', repoName, 'got', commit);
       repo.commit = commit;
     }
 

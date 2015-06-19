@@ -6,10 +6,11 @@
       $http.get('/pull/' + name)
         .then(function (response) {
           var commit = response.data;
-          la(check.commitId(commit), 'expected short commit id', commit,
-            'after pulling', name);
+          la(check.object(commit) &&
+             check.commitId(commit.hash), 'expected short commit id', commit,
+             'after pulling', name);
           console.log('pulled repo', name, commit);
-          Alertify.success('Pulled repo', name, commit.substr(0, 7));
+          Alertify.success('Pulled repo', name, commit.hash.substr(0, 7), commit.committerDateRel);
           $timeout(function () {
             location.reload(true);
           }, 2000);
