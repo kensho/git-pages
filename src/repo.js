@@ -22,7 +22,7 @@ function cloneRepo(storagePath, toFullUrl, repoName, info) {
     console.log('cloning repo %s from %s to %s',
       quote(repoName), quote(url), quote(repoPath));
 
-    repoCloned = Q.nfcall(git.clone, url, repoPath)
+    repoCloned = Q(git).ninvoke('clone', url, repoPath)
       .then(R.always(repoPath))
       .catch(function (err) {
         console.log('Error cloning:', repoName, err);
