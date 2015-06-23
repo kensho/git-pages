@@ -7,7 +7,7 @@ var R = require('ramda');
 var fs = require('fs');
 var exists = fs.existsSync;
 var git = require('gift');
-var gitlog = require('gitlog');
+var gitlog = Q.denodeify(require('gitlog'));
 var ggit = require('ggit');
 var chdir = require('chdir-promise');
 
@@ -74,7 +74,7 @@ function lastCommit(storagePath, repoName) {
     number: 1,
     fields: ['hash', 'subject', 'committerDateRel']
   };
-  return Q.nfcall(gitlog, logOpts).then(R.prop(0));
+  return gitlog(logOpts).then(R.prop(0));
 }
 
 function formExec(command, localPath) {
