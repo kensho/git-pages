@@ -32,7 +32,8 @@ function cloneRepo(storagePath, toFullUrl, repoName, info) {
   la(check.fn(toFullUrl), 'expected full url function', toFullUrl);
 
   var repoPath = join(storagePath, repoName);
-  var repoCloned = Q(null);
+  var repoCloned = Q(repoPath);
+
   if (!exists(repoPath)) {
 
     if (check.has(info, 'git') && check.unemptyString(info.git)) {
@@ -108,6 +109,7 @@ function formExec(command, localPath) {
   la(check.unemptyString(localPath), 'missing local path', localPath);
 
   if (!command) {
+    console.log('there is no shell command for %s', localPath);
     return Q.when();
   }
   var chdir = require('chdir-promise');
@@ -125,6 +127,7 @@ function formExec(command, localPath) {
 }
 
 function shellCommand(repoConfig, localPath) {
+  console.log('Executing shell command in %s', localPath);
   la(check.unemptyString(localPath), 'expected local path', localPath);
   var step = formExec(repoConfig, localPath);
   la(check.promise(step), 'expected to form a promise');

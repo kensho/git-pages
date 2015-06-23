@@ -66,6 +66,10 @@ module.exports = {
     'local-angular': {
       git: 'bahmutov/local-angular-development',
       branch: 'gh-pages' // pick branch other than master
+    },
+    'local-folder': {
+      // copy and serve a local folder instead of Git repo
+      folder: '/path/to/foo'
     }
   },
   storagePath: '/tmp/kpages', // local temp folder, optional

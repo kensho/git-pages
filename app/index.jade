@@ -40,7 +40,7 @@ html(lang="en")
           thead
             tr
               td(width="200") name
-              td(width="300") git
+              td(width="300") git or folder
               td branch
               td link
               td pull
@@ -50,15 +50,20 @@ html(lang="en")
               tr
                 td= name
                 td
-                  a(href="https://github.com/#{repo.git}/tree/#{repo.branch}",
-                    target="_blank",
-                    title="Open the git page") #{repo.git}
+                  if repo.git
+                    a(href="https://github.com/#{repo.git}/tree/#{repo.branch}",
+                      target="_blank",
+                      title="Open the git page") #{repo.git}
+                  else if repo.folder
+                    span #{repo.folder}
                 td= repo.branch
                 td
                   a(href="./#{name}", target="_blank", title="Open the static page in the new tab") open
                 td
                   a(title="Pull latest code from the repo", ng-click="pull('#{name}')") pull
-                td #{repo.commit.hash.substr(0, 7)} (#{repo.commit.committerDateRel})
+                td
+                  if repo.commit
+                    #{repo.commit.hash.substr(0, 7)} (#{repo.commit.committerDateRel})
     .row
       include partials/footer
 
