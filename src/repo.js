@@ -10,6 +10,21 @@ var git = require('gift');
 var gitlog = Q.denodeify(require('gitlog'));
 var ggit = require('ggit');
 var chdir = require('chdir-promise');
+var ncp = require('ncp').ncp;
+
+function copyFolder(source, destination) {
+  la(check.unemptyString(source), 'expected source folder', source);
+  var defer = Q.defer();
+  console.log('Copying %s to %s', quote(source), quote(destination));
+  ncp(source, destination, function (err) {
+    if (err) {
+      defer.reject(err);
+    } else {
+      defer.resolve(destination);
+    }
+  });
+  return defer.promise;
+}
 
 function cloneRepo(storagePath, toFullUrl, repoName, info) {
   la(check.unemptyString(storagePath), 'missing storage path', storagePath);
@@ -19,16 +34,27 @@ function cloneRepo(storagePath, toFullUrl, repoName, info) {
   var repoPath = join(storagePath, repoName);
   var repoCloned = Q(null);
   if (!exists(repoPath)) {
-    var url = toFullUrl(info.git);
-    console.log('cloning repo %s from %s to %s',
-      quote(repoName), quote(url), quote(repoPath));
 
-    repoCloned = Q(git).ninvoke('clone', url, repoPath)
-      .then(R.always(repoPath))
-      .catch(function (err) {
-        console.log('Error cloning:', repoName, err);
-        throw err;
-      });
+    if (check.has(info, 'git') && check.unemptyString(info.git)) {
+      console.log('forming full git', info);
+      var url = toFullUrl(info.git);
+      console.log('cloning repo %s from %s to %s',
+        quote(repoName), quote(url), quote(repoPath));
+
+      repoCloned = Q(git).ninvoke('clone', url, repoPath)
+        .then(R.always(repoPath))
+        .catch(function (err) {
+          console.log('Error cloning:', repoName, err);
+          throw err;
+        });
+    } else if (check.has(info, 'folder')) {
+      // copy folder
+      repoCloned = copyFolder(info.folder, repoPath);
+    } else {
+      throw new Error('Cannot determine how to clone / copy source repo ' +
+        JSON.stringify(info));
+    }
+
   }
   return repoCloned;
 }

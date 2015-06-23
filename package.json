@@ -13,8 +13,8 @@
   "homepage": "https://github.com/kensho/git-pages",
   "scripts": {
     "test": "mocha --compilers es6:mocha-traceur -R spec src/**/*-spec.es6 src/**/*-spec.js",
-    "start": "node index.js",
-    "watch": "nodemon"
+    "start": "node bin/git-pages.js",
+    "watch": "nodemon bin/git-pages.js"
   },
   "author": "Martin Camacho <martin@mcamac.com>",
   "contributors": [
@@ -27,11 +27,12 @@
     "express": "4.13.0",
     "ggit": "0.13.0",
     "gift": "0.6.0",
-    "jade": "1.11.0",
     "gitlog": "2.0.1",
+    "jade": "1.11.0",
     "lazy-ass": "0.5.8",
     "marked": "0.3.3",
     "morgan": "1.6.0",
+    "ncp": "2.0.0",
     "ng-alertify": "0.8.0",
     "ng-http-estimate": "0.6.0",
     "nopt": "3.0.3",
