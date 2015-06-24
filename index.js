@@ -40,29 +40,75 @@ function gitPages(options) {
     useHttps: userConfig.useHttps
   });
 
+  function repoToFolder(repo) {
+    la(check.object(repo), 'missing repo');
+    la(check.unemptyString(repo.name), 'missing repo name', repo);
+
+    function passPath(path) {
+      la(check.unemptyString(path), 'copied folder should return path', path);
+      console.log('Local folder in %s', path);
+      return path;
+    }
+
+    var isGitRepo = check.unemptyString(repo.git);
+
+    console.log('pulling repo %s, is git?', repo.name, isGitRepo);
+
+    var clone = R.partial(repoCommands.clone, repo.name, repo);
+
+    var pull = isGitRepo ?
+      R.partial(repoCommands.pull, repo.name, repo.branch) :
+      clone;
+
+    var shell = R.partial(repoCommands.shell, repo.exec);
+
+    function noop() {}
+
+    var commitId = isGitRepo ?
+      R.partial(repoCommands.lastCommit, repo.name) : noop;
+
+    function rememberCommit(commit) {
+      la(check.object(commit), 'expected commit obj for', repo.name, 'got', commit);
+      la(check.commitId(commit.hash), 'expected commit for', repo.name, 'got', commit);
+      repo.commit = commit;
+      console.log('remembering commit %s', commit);
+      return commit;
+    }
+
+    var setCommit = isGitRepo ? R.pipeP(commitId, rememberCommit) : noop;
+    return R.pipeP(pull, shell, setCommit);
+  }
+
   app.get('/pull/:repo', function (req, res) {
     var name = req.params.repo;
     if (!name) {
       console.log('cannot pull repo without name', req.params);
       return res.sendStatus(400);
     }
+
     console.log('received pull for repo %s', quote(name));
     var config = repoConfig[name];
     if (!config) {
       console.log('cannot find repo %s', quote(name));
-      res.status(404).send('Cannot find repo ' + name);
+      return res.status(404).send('Cannot find repo ' + name);
     }
-    // no need to clone, the repo is already there
-    var shell = R.partial(repoCommands.shell, config.exec);
-    function sendOk(commit) {
-      la(check.object(commit), 'expected commit obj for', name, 'got', commit);
-      la(check.commitId(commit.hash), 'expected commit for', name, 'got', commit);
-      res.status(200).send(commit).end();
-    };
+    if (!check.has(config, 'name')) {
+      config.name = name;
+    }
 
-    repoCommands.pull(name, config.branch)
-      .then(shell)
-      .then(R.partial(repoCommands.lastCommit, name))
+    // no need to clone, the repo is already there
+    // var shell = R.partial(repoCommands.shell, config.exec);
+
+    function sendOk(commit) {
+      if (commit) {
+        la(check.object(commit), 'expected commit obj for', name, 'got', commit);
+        la(check.commitId(commit.hash), 'expected commit for', name, 'got', commit);
+        return res.status(200).send(commit).end();
+      }
+      res.status(200).send().end();
+    }
+
+    repoToFolder(config)()
       .then(sendOk)
       .done();
   });
@@ -95,44 +141,18 @@ function gitPages(options) {
   function fetchRepo(repoName) {
     la(check.unemptyString(repoName), 'missing repo name', repoName);
     var repo = repoConfig[repoName];
+    if (!check.has(repo, 'name')) {
+      repo.name = repoName;
+    }
 
     var clone = R.partial(repoCommands.clone, repoName, repo);
-
-    function passPath(path) {
-      la(check.unemptyString(path), 'copied folder should return path', path);
-      console.log('Local folder in %s', path);
-      return path;
-    }
-
-    var isGitRepo = check.unemptyString(repo.git);
-
-    var pull = isGitRepo ?
-      R.partial(repoCommands.pull, repoName, repo.branch) :
-      passPath;
-
-    var shell = R.partial(repoCommands.shell, repo.exec);
-
-    function noop() {}
-
-    var commitId = isGitRepo ?
-      R.partial(repoCommands.lastCommit, repoName) : noop;
-
-    function rememberCommit(commit) {
-      la(check.object(commit), 'expected commit obj for', repoName, 'got', commit);
-      la(check.commitId(commit.hash), 'expected commit for', repoName, 'got', commit);
-      repo.commit = commit;
-      console.log('remembering commit %s', commit);
-    }
-
-    var setCommit = isGitRepo ? rememberCommit : noop;
 
     var route = function route() {
       console.log('setting up route for repo', quote(repoName));
       app.get('/' + repoName, repoRouteFor(repoName));
     };
 
-
-    return R.pipeP(clone, pull, shell, commitId, setCommit, route)();
+    return R.pipeP(clone, R.always(repo), repoToFolder, route)();
   }
 
   var repos = R.keys(repoConfig);
