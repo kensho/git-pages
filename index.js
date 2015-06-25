@@ -165,7 +165,7 @@ function gitPages(options) {
 
   fetchReposOneByOne
     .then(function setupSubapps() {
-      app.use(directToSubApp);
+      // app.use(directToSubApp);
       app.use(express.static(storagePath));
     }).then(function start() {
       var PORT = process.env.PORT || userConfig.port;

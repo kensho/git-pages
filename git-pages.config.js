@@ -17,6 +17,7 @@
 */
 module.exports = {
   repos: {
+    /*
     'code-box': {
       // can use full git SSH url
       // git: 'git@github.com:bahmutov/code-box.git'
@@ -37,7 +38,7 @@ module.exports = {
     'ndc2015-testjs': {
       git: 'git@github.com:kubawalinski/ndc2015-testjs.git',
       index: 'slides-testjs.html'
-    },
+    },*/
     'A': {
       folder: 'test/A'
     }
