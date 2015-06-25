@@ -21,7 +21,7 @@
 
 We love [Github pages](https://pages.github.com/) - a great way to show small JS / HTML library in action.
 A lot of our public repos have them, but what about the private repos? There is no way (aside from 
-hostig [Github Enterprise](https://enterprise.github.com/features)) to have *privately hosted* static
+buying [Github Enterprise](https://enterprise.github.com/features)) to have *privately hosted* static
 pages from a list of your private repos. Unless you use **git-pages**! Just install, put names of
 repos into a config file and start using Node.
 
