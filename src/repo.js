@@ -18,7 +18,9 @@ function copyFolder(source, destination) {
   console.log('Copying %s to %s', quote(source), quote(destination));
   ncp(source, destination, function (err) {
     if (err) {
-      defer.reject(err);
+      console.error('error copying %s to %s', quote(source), quote(destination));
+      console.error(err);
+      defer.reject(check.array(err) ? err[0] : err);
     } else {
       defer.resolve(destination);
     }
