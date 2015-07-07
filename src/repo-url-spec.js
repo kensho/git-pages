@@ -2,7 +2,30 @@ require('lazy-ass');
 var check = require('check-more-types');
 var fullUrl = require('./repo-url');
 
-describe('getting full git ulr', function () {
+describe('join and folder path', function () {
+  var join = require('path').join;
+  var dirname = require('path').dirname;
+
+  it('joins folder and file', function () {
+    var joined = join('foo', 'index.html');
+    var dir = dirname(joined);
+    la(dir === 'foo', dir);
+  });
+
+  it('joins longer folder and file', function () {
+    var joined = join('foo/bar', 'index.html');
+    var dir = dirname(joined);
+    la(dir === 'foo/bar', dir);
+  });
+
+  it('joins folder and longer file', function () {
+    var joined = join('foo', 'bar/index.html');
+    var dir = dirname(joined);
+    la(dir === 'foo/bar', dir);
+  });
+});
+
+describe('getting full git url', function () {
   it('resolves to github', function () {
     var full = fullUrl('foo/bar');
     la(full.indexOf('github.com') !== -1, 'cannot find github', full);

@@ -41,6 +41,10 @@ module.exports = {
     },*/
     'A': {
       folder: 'test/A'
+    },
+    'B': {
+      folder: 'test',
+      index: 'A/index.html'
     }
   },
   storagePath: '/tmp/kpages', // local temp folder, optional

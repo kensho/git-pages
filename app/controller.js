@@ -1,6 +1,7 @@
 var jade = require('jade');
 var join = require('path').join;
 var extname = require('path').extname;
+var dirname = require('path').dirname;
 var R = require('ramda');
 var fromThisFolder = R.partial(join, __dirname);
 var fs = require('fs');
@@ -20,9 +21,18 @@ function indexApp(app, repoConfig) {
 
   var pkg = require('../package.json');
 
+  Object.keys(repoConfig).forEach(function (name) {
+    var config = repoConfig[name];
+    var appPath = join(name, config.index);
+    config.path = dirname(appPath);
+  });
+
   app.get('/', function (req, res) {
     var render = jade.compileFile(fromThisFolder('./index.jade'), { pretty: true });
-    console.log('git names', repoConfig);
+
+    console.log('git repos');
+    console.log(repoConfig);
+
     var data = {
       repos: repoConfig,
       pkg: pkg

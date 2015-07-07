@@ -58,7 +58,7 @@ html(lang="en")
                     span #{repo.folder}
                 td= repo.branch
                 td
-                  a(href="./#{name}/", target="_blank", title="Open the static page in the new tab") open
+                  a(href="./#{repo.path}/", target="_blank", title="Open the static page in the new tab") open
                 td
                   a(title="Pull latest code from the repo", ng-click="pull('#{name}')") pull
                 td
