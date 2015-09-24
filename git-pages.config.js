@@ -29,7 +29,7 @@ module.exports = {
     'local-angular-development': {
       git: 'bahmutov/local-angular-development',
       branch: 'gh-pages'
-    },
+    },*/
     'git-pages': {
       git: 'kensho/git-pages',
       index: 'README.md',
@@ -38,7 +38,7 @@ module.exports = {
     'ndc2015-testjs': {
       git: 'git@github.com:kubawalinski/ndc2015-testjs.git',
       index: 'slides-testjs.html'
-    },*/
+    },
     'A': {
       folder: 'test/A'
     },

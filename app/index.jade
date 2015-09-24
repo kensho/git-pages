@@ -40,15 +40,20 @@ html(lang="en")
           thead
             tr
               td(width="200") name
+              td is git
               td(width="300") git or folder
               td branch
               td link
               td pull
-              td commit
+              td pulled commit
           tbody
             each repo, name in repos
               tr
                 td= name
+                if repo.git
+                  td yes
+                else
+                  td no
                 td
                   if repo.git
                     a(href="https://github.com/#{repo.git}/tree/#{repo.branch}",

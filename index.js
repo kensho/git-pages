@@ -50,6 +50,7 @@ function gitPages(options) {
       return path;
     }
 
+    // could be git repo or another folder
     var isGitRepo = check.unemptyString(repo.git);
 
     console.log('pulling repo %s, is git?', repo.name, isGitRepo);
