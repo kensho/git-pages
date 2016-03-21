@@ -20,7 +20,9 @@
     "issues": "git-issues",
     "format": "standard-format -w index.js src/**/*.js",
     "lint": "standard --verbose index.js src/**/*.js",
-    "pretest": "npm run format && npm run lint"
+    "pretest": "npm run format && npm run lint",
+    "commit": "commit-wizard",
+    "size": "t=\"$(npm pack .)\"; wc -c \"${t}\"; tar tvf \"${t}\"; rm \"${t}\";"
   },
   "author": "Martin Camacho <martin@mcamac.com>",
   "contributors": [
@@ -55,7 +57,7 @@
     "mocha": "2.3.3",
     "mocha-traceur": "2.1.0",
     "nodemon": "1.7.0",
-    "pre-git": "0.6.2",
+    "pre-git": "3.7.1",
     "semantic-release": "^4.3.5",
     "standard": "6.0.8",
     "standard-format": "2.1.1"
@@ -64,7 +66,13 @@
     "type": "git",
     "url": "https://github.com/kensho/git-pages.git"
   },
-  "pre-commit": [
-    "npm test"
-  ]
+  "config": {
+    "pre-git": {
+      "commit-msg": "simple",
+      "pre-commit": ["npm test"],
+      "pre-push": ["npm run size"],
+      "post-commit": [],
+      "post-merge": []
+    }
+  }
 }
