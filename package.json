@@ -10,6 +10,16 @@
     "git-pages": "./bin/git-pages.js"
   },
   "preferGlobal": true,
+  "files": [
+    "index.js",
+    "git-pages.config.js",
+    "bin",
+    "images",
+    "app",
+    "src/**/*.js",
+    "!src/**/*-spec.js",
+    "Procfile"
+  ],
   "homepage": "https://github.com/kensho/git-pages",
   "scripts": {
     "unit": "mocha --compilers js:babel-register src/**/*-spec.js",
