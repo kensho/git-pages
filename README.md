@@ -7,6 +7,7 @@
 [![Build status][git-pages-ci-image] ][git-pages-ci-url]
 [![dependencies][git-pages-dependencies-image] ][git-pages-dependencies-url]
 [![devdependencies][git-pages-devdependencies-image] ][git-pages-devdependencies-url]
+[![semantic-release][semantic-image] ][semantic-url]
 
 [git-pages-icon]: https://nodei.co/npm/git-pages.png?downloads=true
 [git-pages-url]: https://npmjs.org/package/git-pages
@@ -16,6 +17,8 @@
 [git-pages-dependencies-url]: https://david-dm.org/kensho/git-pages
 [git-pages-devdependencies-image]: https://david-dm.org/kensho/git-pages/dev-status.png
 [git-pages-devdependencies-url]: https://david-dm.org/kensho/git-pages#info=devDependencies
+[semantic-image]: https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg
+[semantic-url]: https://github.com/semantic-release/semantic-release
 
 [Demo on Heroku](http://git-pages.herokuapp.com/) - might be asleep.
 
