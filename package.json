@@ -12,11 +12,15 @@
   "preferGlobal": true,
   "homepage": "https://github.com/kensho/git-pages",
   "scripts": {
-    "test": "mocha --compilers js:babel-register src/**/*-spec.js",
+    "unit": "mocha --compilers js:babel-register src/**/*-spec.js",
+    "test": "npm run unit",
     "start": "node bin/git-pages.js",
     "watch": "nodemon bin/git-pages.js",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
-    "issues": "git-issues"
+    "issues": "git-issues",
+    "format": "standard-format -w index.js src/**/*.js",
+    "lint": "standard --verbose index.js src/**/*.js",
+    "pretest": "npm run format && npm run lint"
   },
   "author": "Martin Camacho <martin@mcamac.com>",
   "contributors": [
@@ -25,13 +29,13 @@
   "license": "MIT",
   "dependencies": {
     "chdir-promise": "0.2.1",
-    "check-more-types": "2.1.1",
+    "check-more-types": "2.12.1",
     "express": "4.13.3",
     "ggit": "1.1.4",
     "gift": "0.6.1",
     "gitlog": "2.1.1",
     "jade": "1.11.0",
-    "lazy-ass": "0.6.0",
+    "lazy-ass": "1.4.0",
     "marked": "0.3.5",
     "morgan": "1.6.1",
     "ncp": "2.0.0",
@@ -52,7 +56,9 @@
     "mocha-traceur": "2.1.0",
     "nodemon": "1.7.0",
     "pre-git": "0.6.2",
-    "semantic-release": "^4.3.5"
+    "semantic-release": "^4.3.5",
+    "standard": "6.0.8",
+    "standard-format": "2.1.1"
   },
   "repository": {
     "type": "git",

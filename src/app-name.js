@@ -1,4 +1,4 @@
-require('lazy-ass');
+var la = require('lazy-ass')
 var check = require('check-more-types');
 
 // url is something like http://localhost:8765/foo-bar/baz
