@@ -36,7 +36,8 @@ module.exports = {
       exec: 'npm version'
     },
     'ndc2015-testjs': {
-      git: 'git@github.com:kubawalinski/ndc2015-testjs.git',
+      // git: 'git@github.com:kubawalinski/ndc2015-testjs.git',
+      git: 'https://github.com/kubawalinski/ndc2015-testjs.git',
       index: 'slides-testjs.html'
     },
     'A': {

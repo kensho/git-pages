@@ -75,7 +75,7 @@ module.exports = {
       folder: '/path/to/foo'
     }
   },
-  storagePath: '/tmp/kpages', // local temp folder, optional
+  storagePath: '/tmp/git-pages', // local temp folder, optional, leave it to OS tmp dir
   port: 8765 // serving port, optional
 };
 ```
