@@ -22,9 +22,11 @@ function mergeCliWithConfig(options) {
 
   // TODO read run config using nconf
   var tmpFolder = os.tmpdir()
+  var storageFolder = join(tmpFolder, 'git-pages')
+  console.log('storage folder', storageFolder)
   var defaultConfig = {
     repos: {},
-    storagePath: join(tmpFolder, 'git-pages'),
+    storagePath: storageFolder,
     port: 8765,
     useHttps: false,
   };
