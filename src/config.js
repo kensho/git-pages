@@ -1,7 +1,10 @@
+'use strict'
+
 var exists = require('fs').existsSync;
 var join = require('path').join;
 var R = require('ramda');
 var check = require('check-more-types');
+var os = require('os');
 
 function firstFoundConfig(name) {
   var full = join(process.cwd(), name);
@@ -18,9 +21,10 @@ function mergeCliWithConfig(options) {
   options = options || {};
 
   // TODO read run config using nconf
+  var tmpFolder = os.tmpdir()
   var defaultConfig = {
     repos: {},
-    storagePath: '/tmp/kpages',
+    storagePath: join(tmpFolder, 'git-pages'),
     port: 8765,
     useHttps: false,
   };

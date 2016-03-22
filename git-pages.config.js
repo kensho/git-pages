@@ -47,7 +47,6 @@ module.exports = {
       index: 'A/index.html'
     }
   },
-  storagePath: '/tmp/kpages', // local temp folder, optional
   port: 8765, // serving port, optional
   useHttps: true // form full urls from user / repo using ssh or https
 };
